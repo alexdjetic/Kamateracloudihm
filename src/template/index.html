@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kamatera — Serveurs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container py-4">
+      <h1 class="mb-4">Kamatera — Serveurs</h1>
+
+      <div id="alerts"></div>
+      <div id="servers-container">
+        <div class="text-center py-4" id="loading">Chargement des serveurs…</div>
+      </div>
+
+      <hr class="my-4">
+      <p class="text-muted small">Page générée localement. Utilisez l'endpoint <code>/api/servers</code> pour JSON.</p>
+    </div>
+    <script>
+      // Front-end fetch to /api/servers and render the results.
+      async function fetchServers() {
+        const alerts = document.getElementById('alerts');
+        const container = document.getElementById('servers-container');
+        const loading = document.getElementById('loading');
+        try {
+          const resp = await fetch('/api/servers');
+          const json = await resp.json();
+
+          console.log('Response JSON:', json);
+
+          // json is expected to be an envelope {message, status, data}
+          const status = json.status ?? resp.status;
+          if (status !== 200) {
+            alerts.innerHTML = `<div class="alert alert-danger">${json.message || 'Erreur lors de la récupération des serveurs'}</div>`;
+            loading?.remove();
+            return;
+          }
+
+          const items = Array.isArray(json.data) ? json.data : (json.data?.servers ?? []);
+          loading?.remove();
+          if (!items || items.length === 0) {
+            container.innerHTML = '<div class="alert alert-warning">Aucun serveur trouvé.</div>';
+            return;
+          }
+
+          const list = document.createElement('div');
+          list.className = 'list-group';
+          for (const s of items) {
+            const name = (s?.name || s?.label) || (s?.id || 'Serveur');
+            const statusText = s?.status || 'unknown';
+            const idText = s?.id || '-';
+
+            const item = document.createElement('div');
+            item.className = 'list-group-item';
+            item.innerHTML = `
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">${name}</h5>
+                <small>${statusText}</small>
+              </div>
+              <p class="mb-1">ID: ${idText}</p>
+            `;
+            list.appendChild(item);
+          }
+          container.innerHTML = '';
+          container.appendChild(list);
+        } catch (err) {
+          loading?.remove();
+          alerts.innerHTML = `<div class="alert alert-danger">Erreur réseau: ${err.message || err}</div>`;
+        }
+      }
+
+      // Run on load (use globalThis for broader environments)
+      globalThis.addEventListener('DOMContentLoaded', fetchServers);
+    </script>
+  </body>
+</html>
