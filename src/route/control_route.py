@@ -102,3 +102,27 @@ async def reboot_server(payload: ControlModel) -> ORJSONResponse:
         return ORJSONResponse(content={"message": str(exc)}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return ORJSONResponse(content=res, status_code=res.get("status", 200))
+
+
+@router.post(
+    "/destroy",
+    response_class=ORJSONResponse,
+    description="Détruit/supprime un serveur Kamatera via l'API.",
+    status_code=status.HTTP_200_OK,
+)
+async def destroy_server(payload: ControlModel) -> ORJSONResponse:
+    """Détruit le serveur indiqué par ``payload.server_id``.
+    
+    Cette action est irréversible et supprime définitivement le serveur.
+    """
+    api_key = _get_api_key()
+    if not api_key:
+        return ORJSONResponse(content={"message": API_KEY_MISSING_MSG}, status_code=status.HTTP_401_UNAUTHORIZED)
+
+    client = KamateraCloudManagement(api_key=api_key)
+    try:
+        res: dict[str, Any] = client.delete_server(payload.server_id)
+    except Exception as exc:
+        return ORJSONResponse(content={"message": str(exc)}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return ORJSONResponse(content=res, status_code=res.get("status", 200))

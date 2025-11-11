@@ -132,6 +132,21 @@ async def ui_list_servers(request: Request):
 
 
 @app.get(
+    "/server/{server_id}",
+    response_class=HTMLResponse,
+    description="Affiche une page HTML détaillée pour un serveur spécifique."
+)
+async def ui_server_details(request: Request, server_id: str):
+    """Render a detailed HTML page for a specific server.
+
+    The template is rendered without server-side API calls. The front-end
+    JavaScript will fetch `/api/server?server_id={server_id}` and populate
+    the page dynamically.
+    """
+    return templates.TemplateResponse("detail.html", {"request": request, "server_id": server_id})
+
+
+@app.get(
     "/health",
     response_class=JSONResponse,
     description="Vérifie que l'API est opérationnelle."
