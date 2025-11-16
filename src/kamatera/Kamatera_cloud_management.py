@@ -80,6 +80,22 @@ class KamateraCloudManagement:
             "Content-Type": "application/json",
         }
 
+    def _headers_delete(self) -> Dict[str, str]:
+        """Retourne les en-têtes HTTP pour DELETE.
+        
+        Kamatera API DELETE /terminate needs Content-Type header but requests shouldn't
+        auto-add Content-Length. We'll use a custom approach.
+
+        Returns
+        -------
+        dict
+            Dictionnaire avec Authorization et Accept (Content-Type sera omis).
+        """
+        return {
+            "Authorization": f"Bearer {self.api_key}",
+            "Accept": "application/json",
+        }
+
     # Small helpers to keep formatters simple (reduce cognitive complexity)
     def _is_html_content(self, content_type: str) -> bool:
         """Return True if Content-Type indicates HTML.
@@ -248,7 +264,25 @@ class KamateraCloudManagement:
             Réponse formatée de l'API.
         """
         try:
-            resp: requests.Response = self.session.delete(f"{self.base_url}/server/{server_id}/terminate", headers=self._headers(), timeout=timeout)
+            # Build request manually to have complete control over body
+            headers = self._headers_delete()
+            headers["Content-Type"] = "application/json"
+            
+            # Create a Request object
+            req = requests.Request(
+                method='DELETE',
+                url=f"{self.base_url}/server/{server_id}/terminate",
+                headers=headers
+            )
+            
+            # Prepare it
+            prepared = self.session.prepare_request(req)
+            
+            # Make sure there's no body
+            prepared.body = None
+            
+            # Send it
+            resp: requests.Response = self.session.send(prepared, timeout=timeout)
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:
@@ -263,7 +297,7 @@ class KamateraCloudManagement:
             Détails du serveur dans la clé ``data`` si succès.
         """
         try:
-            resp: requests.Response = self.session.get(f"{self.base_url}/servers/{server_id}", headers=self._headers(), timeout=timeout)
+            resp: requests.Response = self.session.get(f"{self.base_url}/server/{server_id}", headers=self._headers(), timeout=timeout)
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:
@@ -272,7 +306,7 @@ class KamateraCloudManagement:
     def stop_server(self, server_id: str, timeout: Optional[float] = 10.0) -> Dict[str, Any]:
         """Arrête proprement un serveur via l'endpoint ``/power``."""
         try:
-            resp: requests.Response = self.session.put(f"{self.base_url}/servers/{server_id}/power", headers=self._headers(), json={"power": "off"}, timeout=timeout)
+            resp: requests.Response = self.session.put(f"{self.base_url}/server/{server_id}/power", headers=self._headers(), json={"power": "off"}, timeout=timeout)
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:
@@ -281,16 +315,16 @@ class KamateraCloudManagement:
     def start_server(self, server_id: str, timeout: Optional[float] = 10.0) -> Dict[str, Any]:
         """Démarre un serveur via l'endpoint ``/power``."""
         try:
-            resp: requests.Response = self.session.put(f"{self.base_url}/servers/{server_id}/power", headers=self._headers(), json={"power": "on"}, timeout=timeout)
+            resp: requests.Response = self.session.put(f"{self.base_url}/server/{server_id}/power", headers=self._headers(), json={"power": "on"}, timeout=timeout)
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:
             return self._format_error(exc)
         
     def reboot_server(self, server_id: str, timeout: Optional[float] = 10.0) -> Dict[str, Any]:
-        """Démarre un serveur via l'endpoint ``/power``."""
+        """Redémarre un serveur via l'endpoint ``/power``."""
         try:
-            resp: requests.Response = self.session.post(f"{self.base_url}/servers/{server_id}/power", headers=self._headers(), json={"power": "restart"}, timeout=timeout)
+            resp: requests.Response = self.session.put(f"{self.base_url}/server/{server_id}/power", headers=self._headers(), json={"power": "restart"}, timeout=timeout)
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:
@@ -305,7 +339,50 @@ class KamateraCloudManagement:
             Dictionnaire décrivant la nouvelle configuration attendue par l'API.
         """
         try:
-            resp: requests.Response = self.session.put(f"{self.base_url}/servers/{server_id}/rename", headers=self._headers(), json={"name": new_name}, timeout=timeout)
+            resp: requests.Response = self.session.put(f"{self.base_url}/server/{server_id}/rename", headers=self._headers(), json={"name": new_name}, timeout=timeout)
+            resp.raise_for_status()
+            return self._format_response(resp)
+        except requests.RequestException as exc:
+            return self._format_error(exc)
+
+    def clone_server(self, server_id: str, name: Optional[str] = None, password: Optional[str] = None, billing: str = "hour", timeout: Optional[float] = 60.0) -> Dict[str, Any]:
+        """Clone un serveur avec une nouvelle IP publique mais sans le démarrer.
+
+        Parameters
+        ----------
+        server_id:
+            Identifiant du serveur à cloner (source).
+        name:
+            Nom optionnel pour le serveur cloné. Si non fourni, Kamatera génère un nom par défaut.
+        password:
+            Mot de passe root pour le nouveau serveur cloné. Requis par l'API Kamatera.
+        billing:
+            Type de facturation: "hour" (à l'heure) ou "month" (mensuel). Par défaut "hour".
+        timeout:
+            Timeout en secondes pour la requête.
+
+        Returns
+        -------
+        dict
+            Réponse formatée de l'API contenant les détails du serveur cloné.
+        """
+        try:
+            payload = {
+                "source": server_id,
+                "powerOn": "no",
+                "billing": billing
+            }
+            if name:
+                payload["name"] = name
+            if password:
+                payload["password"] = password
+            
+            resp: requests.Response = self.session.post(
+                f"{self.base_url}/server/clone",
+                headers=self._headers(),
+                json=payload,
+                timeout=timeout
+            )
             resp.raise_for_status()
             return self._format_response(resp)
         except requests.RequestException as exc:

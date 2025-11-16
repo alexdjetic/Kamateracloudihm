@@ -47,12 +47,13 @@ async def list_servers() -> ORJSONResponse:
 
     Si la clé API n'est pas configurée, renvoie 401.
     """
-    api_key = _get_api_key()
+    api_key: Optional[str] = _get_api_key()
     if not api_key:
         return ORJSONResponse(content={"message": API_KEY_MISSING_MSG}, status_code=status.HTTP_401_UNAUTHORIZED)
 
     # Avoid logging secrets. Show a masked form to help debugging without
     # exposing the full API key value in logs.
+    print(api_key)
     try:
         masked = f"{api_key[:4]}...{api_key[-4:]}" if api_key and len(api_key) > 8 else "****"
     except Exception:
@@ -63,12 +64,12 @@ async def list_servers() -> ORJSONResponse:
     # helps diagnose situations where the default base_url points to the
     # web console rather than the REST API.
     try:
-        client = KamateraCloudManagement(api_key=api_key)
+        client: KamateraCloudManagement = KamateraCloudManagement(api_key=api_key)
         used_base = client.base_url
         logger.info("Using Kamatera base_url: %s", used_base)
     except Exception:
         # If client construction fails for unexpected reasons, still continue
-        client = KamateraCloudManagement(api_key=api_key)
+        client: KamateraCloudManagement = KamateraCloudManagement(api_key=api_key)
 
     # client variable is already initialised above
     try:
@@ -92,11 +93,12 @@ async def get_server(server_id: str) -> ORJSONResponse:
     if not server_id:
         return ORJSONResponse(content={"message": "server_id required"}, status_code=status.HTTP_400_BAD_REQUEST)
 
-    api_key = _get_api_key()
+    api_key: Optional[str] = _get_api_key()
+    print(api_key)
     if not api_key:
         return ORJSONResponse(content={"message": API_KEY_MISSING_MSG}, status_code=status.HTTP_401_UNAUTHORIZED)
 
-    client = KamateraCloudManagement(api_key=api_key)
+    client: KamateraCloudManagement = KamateraCloudManagement(api_key=api_key)
     try:
         res: dict[str, Any] = client.get_server_details(server_id)
     except Exception as exc:

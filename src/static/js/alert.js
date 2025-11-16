@@ -25,9 +25,9 @@ function showAlert(message, type = 'error') {
  */
 function getStatusColor(status) {
     const statusLower = (status || '').toLowerCase();
-    if (statusLower === 'running' || statusLower === 'started') {
+    if (statusLower === 'running' || statusLower === 'started' || statusLower === 'on') {
         return 'bg-green-100 text-green-800';
-    } else if (statusLower === 'stopped') {
+    } else if (statusLower === 'stopped' || statusLower === 'off') {
         return 'bg-red-100 text-red-800';
     } else {
         return 'bg-gray-100 text-gray-800';
