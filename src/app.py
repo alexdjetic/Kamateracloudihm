@@ -11,6 +11,8 @@ import asyncio
 import os
 from contextlib import asynccontextmanager
 from logger import configure_logging, get_logger
+from route.list_route import router as list_router
+from route.control_route import router as control_router
 
 # Configure logging early using our central helper (reads LOG_LEVEL env var)
 configure_logging()
@@ -109,13 +111,9 @@ app = FastAPI(title="Kamatera Cloud IHM", lifespan=lifespan)
 # mount static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# include API routers (serve JSON endpoints under /api)
-from route.list_route import router as list_router
-from route.control_route import router as control_router
-
+# Include API routers
 app.include_router(list_router, prefix="/api")
 app.include_router(control_router, prefix="/api")
-
 
 @app.get(
     "/",

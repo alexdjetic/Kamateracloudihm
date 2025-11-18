@@ -1,48 +1,49 @@
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kamatera — Serveurs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
-      <h1 class="text-3xl font-bold text-gray-900 mb-6">Kamatera — Serveurs</h1>
+{% extends "base.html" %}
 
-      <div id="alerts"></div>
-      <div id="servers-container">
-        <div class="text-center py-8" id="loading">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          <p class="mt-2 text-gray-600">Chargement des serveurs…</p>
-        </div>
-      </div>
+{% block title %}Kamatera — Liste des Serveurs{% endblock %}
 
-      <hr class="my-8 border-gray-300">
-      <p class="text-gray-500 text-sm">Page générée localement. Utilisez l'endpoint <code class="bg-gray-200 px-2 py-1 rounded">/api/servers</code> pour JSON.</p>
-    </div>
-    <script src="/static/js/alert.js"></script>
-    <script src="/static/js/control.js"></script>
-    <script src="/static/js/render.js"></script>
-    <script src="/static/js/fetcher.js"></script>
-    <script>
-      /**
-       * Remove loading indicator
-       */
-      function removeLoading() {
-        const loading = document.getElementById('loading');
-        loading?.remove();
-      }
+{% block header %}
+<a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+  </svg>
+  Mes Serveurs
+</a>
+{% endblock %}
 
-      /**
-       * View server details
-       */
-      function viewDetails(serverId) {
-        globalThis.location.href = `/server/${serverId}`;
-      }
+{% block content %}
+<!-- Loading indicator -->
+<div id="loading" class="text-center py-12">
+  <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  <p class="mt-4 text-gray-600">Chargement des serveurs…</p>
+</div>
 
-      // Run on load
-      globalThis.addEventListener('DOMContentLoaded', fetchServers);
-    </script>
-  </body>
-</html>
+<!-- Servers container -->
+<div id="servers-container" class="hidden">
+  <!-- Will be populated dynamically -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/render.js"></script>
+<script src="/static/js/fetcher.js"></script>
+<script>
+  /**
+   * View server details
+   */
+  function viewDetails(serverId) {
+    globalThis.location.href = `/server/${serverId}`;
+  }
+
+  /**
+   * Remove loading indicator
+   */
+  function removeLoading() {
+    document.getElementById('loading')?.classList.add('hidden');
+    document.getElementById('servers-container')?.classList.remove('hidden');
+  }
+
+  // Load servers on page load
+  globalThis.addEventListener('DOMContentLoaded', fetchServers);
+</script>
+{% endblock %}
