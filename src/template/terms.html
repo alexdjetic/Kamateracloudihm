@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Conditions d'utilisation — Kamatera Cloud{% endblock %}
+
+{% block header %}
+<div class="flex items-center gap-4 mb-8">
+  <a href="/" class="p-2 hover:bg-gray-800/50 rounded-lg transition-colors" title="Retour">
+    <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+  </a>
+  <div>
+    <h2 class="text-4xl font-bold text-white">Conditions d'utilisation</h2>
+    <p class="text-gray-400 mt-1">Veuillez lire attentivement nos conditions</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <div class="bg-gray-800/50 backdrop-blur border border-gray-700/50 rounded-2xl p-8 space-y-8">
+    
+    <!-- Introduction -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">1. Conditions générales</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Ces conditions d'utilisation régissent l'accès et l'utilisation de l'interface Kamatera Cloud. En utilisant cette application, vous acceptez de respecter ces conditions. Si vous n'êtes pas d'accord avec l'une de ces conditions, veuillez ne pas utiliser cette application.
+      </p>
+    </section>
+
+    <!-- Licence d'utilisation -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">2. Licence d'utilisation</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Nous vous accordons une licence limitée, non exclusive et non transférable pour utiliser cette interface à des fins de gestion de vos serveurs Kamatera. Cette licence ne vous permet pas de :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>Copier ou reproduire l'interface</li>
+        <li>Modifier ou créer des œuvres dérivées</li>
+        <li>Vendre ou louer l'interface</li>
+        <li>Utiliser l'interface pour des services concurrents</li>
+        <li>Accéder ou utiliser l'interface de manière non autorisée</li>
+      </ul>
+    </section>
+
+    <!-- Utilisation acceptable -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">3. Utilisation acceptable</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Vous acceptez d'utiliser cette interface uniquement pour des fins légitimes et de ne pas :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>Violer les lois applicables</li>
+        <li>Accéder à des données non autorisées</li>
+        <li>Effectuer des attaques ou des tests de pénétration</li>
+        <li>Perturber le service ou les serveurs</li>
+        <li>Partager vos identifiants de connexion</li>
+      </ul>
+    </section>
+
+    <!-- Responsabilité -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">4. Limitation de responsabilité</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Cette interface est fournie « telle quelle » sans garantie d'aucune sorte. Nous ne sommes pas responsables des pertes ou dommages résultant de l'utilisation ou de l'impossibilité d'utiliser l'interface. Votre utilisation des serveurs Kamatera reste sous votre responsabilité exclusive.
+      </p>
+    </section>
+
+    <!-- Données et sécurité -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">5. Données et sécurité</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Vous êtes entièrement responsable de :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>La sécurité de vos identifiants Kamatera</li>
+        <li>La protection de vos données et de vos serveurs</li>
+        <li>La sauvegarde régulière de vos données</li>
+        <li>Le respect des politique de Kamatera</li>
+      </ul>
+    </section>
+
+    <!-- Modifications -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">6. Modifications du service</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous nous réservons le droit de modifier, suspendre ou interrompre ce service à tout moment, avec ou sans préavis. Nous ne serons pas responsables de tout dommage résultant de ces modifications.
+      </p>
+    </section>
+
+    <!-- Résiliation -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">7. Résiliation</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous pouvons résilier votre accès à l'interface à tout moment et pour n'importe quelle raison, notamment en cas de violation de ces conditions. À la résiliation, vos droits d'utilisation cesseront immédiatement.
+      </p>
+    </section>
+
+    <!-- Droit applicable -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">8. Droit applicable</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Ces conditions sont régies par la loi applicable dans votre juridiction. Vous acceptez la juridiction exclusive des tribunaux compétents.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">9. Contact</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Pour toute question concernant ces conditions, veuillez nous contacter via le formulaire de support dans l'application.
+      </p>
+    </section>
+
+    <!-- Date -->
+    <div class="border-t border-gray-700/30 pt-6 mt-8">
+      <p class="text-sm text-gray-500">
+        Dernière mise à jour : 6 décembre 2025
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

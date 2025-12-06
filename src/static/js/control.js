@@ -1,5 +1,67 @@
 /**
- * Start the server
+ * Quick start server from list view
+ */
+async function startServerQuick(serverId) {
+    const name = `Serveur ${serverId.substring(0, 8)}...`;
+
+    if (!confirm(`Démarrer ce serveur ?`)) {
+        return;
+    }
+
+    // Show loading message
+    showAlert(`⏳ Démarrage du serveur en cours...`, 'warning');
+
+    try {
+        const resp = await fetch('/api/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ server_id: serverId })
+        });
+        const json = await resp.json();
+
+        if (resp.ok) {
+            showAlert(`✅ Serveur démarré avec succès!`, 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showAlert(`❌ Erreur: ${json.message || 'Impossible de démarrer le serveur'}`, 'error');
+        }
+    } catch (err) {
+        showAlert(`❌ Erreur réseau: ${err.message}`, 'error');
+    }
+}
+
+/**
+ * Quick stop server from list view
+ */
+async function stopServerQuick(serverId) {
+    if (!confirm(`Arrêter ce serveur ?`)) {
+        return;
+    }
+
+    // Show loading message
+    showAlert(`⏳ Arrêt du serveur en cours...`, 'warning');
+
+    try {
+        const resp = await fetch('/api/stop', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ server_id: serverId })
+        });
+        const json = await resp.json();
+
+        if (resp.ok) {
+            showAlert(`✅ Serveur arrêté avec succès!`, 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showAlert(`❌ Erreur: ${json.message || 'Impossible d\'arrêter le serveur'}`, 'error');
+        }
+    } catch (err) {
+        showAlert(`❌ Erreur réseau: ${err.message}`, 'error');
+    }
+}
+
+/**
+ * Start the server (detail view)
  */
 async function startServer() {
     const serverId = getServerIdFromUrl();
@@ -38,7 +100,7 @@ async function startServer() {
 }
 
 /**
- * Stop the server
+ * Stop the server (detail view)
  */
 async function stopServer() {
     const serverId = getServerIdFromUrl();

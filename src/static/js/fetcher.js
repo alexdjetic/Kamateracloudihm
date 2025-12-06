@@ -144,11 +144,7 @@ async function fetchServers() {
         removeLoading();
 
         if (!items || items.length === 0) {
-            container.innerHTML = `
-              <div class="bg-yellow-100 border-yellow-400 text-yellow-700 border px-4 py-3 rounded" role="alert">
-                <span class="block sm:inline">Aucun serveur trouvé.</span>
-              </div>
-            `;
+            showEmptyState();
             return;
         }
 

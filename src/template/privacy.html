@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Politique de confidentialité — Kamatera Cloud{% endblock %}
+
+{% block header %}
+<div class="flex items-center gap-4 mb-8">
+  <a href="/" class="p-2 hover:bg-gray-800/50 rounded-lg transition-colors" title="Retour">
+    <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+  </a>
+  <div>
+    <h2 class="text-4xl font-bold text-white">Politique de confidentialité</h2>
+    <p class="text-gray-400 mt-1">Votre vie privée est importante pour nous</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <div class="bg-gray-800/50 backdrop-blur border border-gray-700/50 rounded-2xl p-8 space-y-8">
+    
+    <!-- Introduction -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">1. Introduction</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Kamatera Cloud s'engage à protéger votre vie privée. Cette politique de confidentialité explique comment nous collectons, utilisons, stockons et protégeons vos informations personnelles.
+      </p>
+    </section>
+
+    <!-- Informations collectées -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">2. Informations que nous collectons</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Nous collectons les informations suivantes :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li><strong>Identifiants :</strong> Vos identifiants Kamatera pour accéder aux serveurs</li>
+        <li><strong>Données de serveurs :</strong> Informations sur vos serveurs (nom, configuration, statut)</li>
+        <li><strong>Journaux d'activité :</strong> Actions effectuées dans l'interface</li>
+        <li><strong>Données techniques :</strong> Adresse IP, type de navigateur, système d'exploitation</li>
+        <li><strong>Cookies :</strong> Données de session pour améliorer votre expérience</li>
+      </ul>
+    </section>
+
+    <!-- Utilisation des données -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">3. Comment nous utilisons vos données</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Vos informations sont utilisées pour :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>Fournir et maintenir l'interface</li>
+        <li>Authentifier votre accès aux serveurs</li>
+        <li>Améliorer et optimiser le service</li>
+        <li>Diagnostiquer et résoudre les problèmes</li>
+        <li>Prévenir la fraude et les abus</li>
+        <li>Vous envoyer des notifications importantes</li>
+      </ul>
+    </section>
+
+    <!-- Partage des données -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">4. Partage des données</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Nous ne partageons pas vos informations personnelles avec des tiers, sauf :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>Avec Kamatera pour accéder à vos serveurs</li>
+        <li>Lorsque requis par la loi</li>
+        <li>Pour protéger nos droits ou votre sécurité</li>
+        <li>Avec des prestataires de services agissant en tant qu'agents</li>
+      </ul>
+    </section>
+
+    <!-- Sécurité des données -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">5. Sécurité des données</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous implémentons des mesures de sécurité techniques et organisationnelles pour protéger vos données :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc mt-4">
+        <li>Chiffrement des données en transit (HTTPS)</li>
+        <li>Accès authentifié à l'interface</li>
+        <li>Journaux d'audit des activités</li>
+        <li>Isolation des données utilisateur</li>
+        <li>Mises à jour de sécurité régulières</li>
+      </ul>
+      <p class="text-gray-300 leading-relaxed mt-4">
+        Cependant, aucun système n'est parfaitement sécurisé. Nous ne pouvons pas garantir une sécurité absolue.
+      </p>
+    </section>
+
+    <!-- Rétention des données -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">6. Rétention des données</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous conservons vos données aussi longtemps que nécessaire pour fournir le service. Les données de session sont supprimées après votre déconnexion. Les journaux d'activité sont conservés pour des raisons de sécurité et d'audit.
+      </p>
+    </section>
+
+    <!-- Vos droits -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">7. Vos droits</h3>
+      <p class="text-gray-300 leading-relaxed mb-4">
+        Vous avez le droit de :
+      </p>
+      <ul class="space-y-2 text-gray-300 ml-6 list-disc">
+        <li>Accéder à vos données personnelles</li>
+        <li>Rectifier les données inexactes</li>
+        <li>Supprimer vos données (sous certaines conditions)</li>
+        <li>Vous opposer à certains traitements</li>
+        <li>Obtenir une copie portable de vos données</li>
+      </ul>
+      <p class="text-gray-300 leading-relaxed mt-4">
+        Pour exercer ces droits, contactez-nous via le formulaire de support.
+      </p>
+    </section>
+
+    <!-- Cookies -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">8. Cookies et technologies similaires</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous utilisons des cookies pour maintenir votre session et améliorer votre expérience. Vous pouvez contrôler les cookies via les paramètres de votre navigateur.
+      </p>
+    </section>
+
+    <!-- Modifications -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">9. Modifications de cette politique</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Nous pouvons modifier cette politique de confidentialité à tout moment. Les modifications seront publiées sur cette page avec une date de mise à jour. L'utilisation continue du service après les modifications constitue votre acceptation.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section>
+      <h3 class="text-2xl font-bold text-white mb-4">10. Contact</h3>
+      <p class="text-gray-300 leading-relaxed">
+        Pour toute question concernant cette politique de confidentialité ou vos données, veuillez nous contacter via le formulaire de support dans l'application.
+      </p>
+    </section>
+
+    <!-- Date -->
+    <div class="border-t border-gray-700/30 pt-6 mt-8">
+      <p class="text-sm text-gray-500">
+        Dernière mise à jour : 6 décembre 2025
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

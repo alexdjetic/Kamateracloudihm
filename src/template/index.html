@@ -1,49 +1,73 @@
 {% extends "base.html" %}
 
-{% block title %}Kamatera — Liste des Serveurs{% endblock %}
+{% block title %}Kamatera — Mes Serveurs{% endblock %}
 
 {% block header %}
-<a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800">
-  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-  </svg>
-  Mes Serveurs
-</a>
+<div class="mb-8">
+  <h2 class="text-4xl font-bold text-white mb-2">Mes Serveurs</h2>
+  <p class="text-gray-400">Gérez tous vos serveurs Kamatera en un seul endroit</p>
+</div>
 {% endblock %}
 
 {% block content %}
-<!-- Loading indicator -->
-<div id="loading" class="text-center py-12">
-  <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-  <p class="mt-4 text-gray-600">Chargement des serveurs…</p>
+<!-- Loading state -->
+<div id="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6 animate-pulse">
+    <div class="h-6 bg-gray-700 rounded w-2/3 mb-4"></div>
+    <div class="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
+    <div class="space-y-3">
+      <div class="h-4 bg-gray-700 rounded"></div>
+      <div class="h-4 bg-gray-700 rounded w-5/6"></div>
+    </div>
+  </div>
+  <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6 animate-pulse">
+    <div class="h-6 bg-gray-700 rounded w-2/3 mb-4"></div>
+    <div class="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
+    <div class="space-y-3">
+      <div class="h-4 bg-gray-700 rounded"></div>
+      <div class="h-4 bg-gray-700 rounded w-5/6"></div>
+    </div>
+  </div>
+  <div class="bg-gray-800/50 backdrop-blur rounded-xl p-6 animate-pulse">
+    <div class="h-6 bg-gray-700 rounded w-2/3 mb-4"></div>
+    <div class="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
+    <div class="space-y-3">
+      <div class="h-4 bg-gray-700 rounded"></div>
+      <div class="h-4 bg-gray-700 rounded w-5/6"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Servers container -->
-<div id="servers-container" class="hidden">
-  <!-- Will be populated dynamically -->
+<div id="servers-container" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Cards will be injected here -->
+</div>
+
+<!-- Empty state -->
+<div id="empty-state" class="hidden text-center py-16">
+  <div class="bg-gray-800/50 backdrop-blur rounded-xl p-12 max-w-md mx-auto">
+    <div class="text-5xl mb-4">🖥️</div>
+    <h3 class="text-xl font-semibold text-white mb-2">Aucun serveur</h3>
+    <p class="text-gray-400">Vous n'avez pas encore créé de serveur</p>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="/static/js/render.js"></script>
 <script src="/static/js/fetcher.js"></script>
+<script src="/static/js/control.js"></script>
 <script>
-  /**
-   * View server details
-   */
-  function viewDetails(serverId) {
-    globalThis.location.href = `/server/${serverId}`;
-  }
-
-  /**
-   * Remove loading indicator
-   */
   function removeLoading() {
     document.getElementById('loading')?.classList.add('hidden');
     document.getElementById('servers-container')?.classList.remove('hidden');
   }
 
-  // Load servers on page load
+  function showEmptyState() {
+    document.getElementById('loading')?.classList.add('hidden');
+    document.getElementById('empty-state')?.classList.remove('hidden');
+  }
+
   globalThis.addEventListener('DOMContentLoaded', fetchServers);
 </script>
 {% endblock %}
