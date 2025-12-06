@@ -145,6 +145,26 @@ async def ui_server_details(request: Request, server_id: str):
 
 
 @app.get(
+    "/privacy",
+    response_class=HTMLResponse,
+    description="Affiche la page de Politique de confidentialité."
+)
+async def privacy_policy(request: Request):
+    """Render the privacy policy page."""
+    return templates.TemplateResponse("privacy.html", {"request": request})
+
+
+@app.get(
+    "/terms",
+    response_class=HTMLResponse,
+    description="Affiche la page des Conditions d'utilisation."
+)
+async def terms_of_service(request: Request):
+    """Render the terms of service page."""
+    return templates.TemplateResponse("terms.html", {"request": request})
+
+
+@app.get(
     "/health",
     response_class=JSONResponse,
     description="Vérifie que l'API est opérationnelle."
