@@ -1,23 +1,41 @@
 /**
- * Display an alert message
+ * Display an alert message with modern styling
  */
 function showAlert(message, type = 'error') {
     const alerts = document.getElementById('alerts');
-    let alertClass;
+    let alertClass, icon;
 
     if (type === 'error') {
-        alertClass = 'bg-red-100 border-red-400 text-red-700';
+        alertClass = 'bg-red-50 border-l-4 border-red-500 text-red-700';
+        icon = '❌';
     } else if (type === 'success') {
-        alertClass = 'bg-green-100 border-green-400 text-green-700';
+        alertClass = 'bg-green-50 border-l-4 border-green-500 text-green-700';
+        icon = '✅';
     } else {
-        alertClass = 'bg-yellow-100 border-yellow-400 text-yellow-700';
+        alertClass = 'bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700';
+        icon = '⚠️';
     }
 
-    alerts.innerHTML = `
-          <div class="${alertClass} border px-4 py-3 rounded mb-4" role="alert">
-            <span class="block sm:inline">${message}</span>
-          </div>
-        `;
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `${alertClass} px-4 py-4 rounded-lg mb-4 flex items-start gap-3 shadow-md`;
+    alertDiv.innerHTML = `
+        <span class="text-xl flex-shrink-0">${icon}</span>
+        <div class="flex-1">
+            <p class="font-medium">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="flex-shrink-0 text-xl cursor-pointer hover:opacity-70">
+            ✕
+        </button>
+    `;
+    
+    alerts.appendChild(alertDiv);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        alertDiv.style.opacity = '0';
+        alertDiv.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => alertDiv.remove(), 300);
+    }, 5000);
 }
 
 /**
