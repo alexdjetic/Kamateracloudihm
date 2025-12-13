@@ -50,16 +50,11 @@ jobs:
           VERSION=$(grep '^version = ' src/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Extract metadata and tags
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REGISTRY_ID }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=${{ steps.version.outputs.version }}
-            type=raw,value=latest
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-
+      - name: Build image tags
+        id: tags
+        run: |
+          IMAGE_BASE="${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REGISTRY_ID }}/${{ env.IMAGE_NAME }}"
+          echo "tags=${IMAGE_BASE}:${{ steps.version.outputs.version }},${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
       
       # 3. BUILD ET PUSH
       # Docker est désormais configuré pour s'authentifier automatiquement vers AR.
@@ -68,8 +63,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.tags.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
