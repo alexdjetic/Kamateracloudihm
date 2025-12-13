@@ -55,6 +55,13 @@ jobs:
         run: |
           IMAGE_BASE="${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REGISTRY_ID }}/${{ env.IMAGE_NAME }}"
           echo "tags=${IMAGE_BASE}:${{ steps.version.outputs.version }},${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
+
+      # Supprime l'ancien tag latest avant de pusher le nouveau
+      - name: Delete old latest tag
+        run: |
+          IMAGE_PATH="${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REGISTRY_ID }}/${{ env.IMAGE_NAME }}:latest"
+          gcloud artifacts docker images delete "$IMAGE_PATH" --quiet || echo "No previous latest tag found"
+        continue-on-error: true
       
       # 3. BUILD ET PUSH
       # Docker est désormais configuré pour s'authentifier automatiquement vers AR.
