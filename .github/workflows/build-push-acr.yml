@@ -1,0 +1,75 @@
+name: Build and Push to Google Artifact Registry
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  IMAGE_NAME: kamateracloudihm
+  REGISTRY_ID: acr-adjetic 
+  GCP_REGION: europe-west1
+
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. AUTHENTIFICATION VIA LE FICHIER JSON
+      # Cette action lit le contenu de ${{ secrets.GCP_SA_KEY }} (votre clé JSON)
+      - name: Authenticate to Google Cloud (via Service Account Key)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # 2. CONFIGURATION DE DOCKER
+      # Cette commande utilise l'identité établie par le JSON pour générer et fournir
+      # un jeton OAuth 2.0 temporaire à Docker.
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+      # Correction : Retrait du doublon.
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract version from pyproject.toml
+        id: version
+        run: |
+          VERSION=$(grep '^version = ' src/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata and tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REGISTRY_ID }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.version.outputs.version }}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+      
+      # 3. BUILD ET PUSH
+      # Docker est désormais configuré pour s'authentifier automatiquement vers AR.
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
